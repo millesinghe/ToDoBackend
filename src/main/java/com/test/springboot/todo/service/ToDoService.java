@@ -37,7 +37,7 @@ public class ToDoService {
 		
 	}
 
-	private ToDo findById(int id) {
+	public ToDo findById(int id) {
 
 		for (ToDo todo : todos) {
 			if (todo.getId() == id) {
