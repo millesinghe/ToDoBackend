@@ -1,15 +1,25 @@
 package com.test.springboot.todo;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.springboot.todo.model.ToDo;
 import com.test.springboot.todo.service.ToDoService;
 
@@ -34,6 +44,19 @@ public class ToDoController {
 	@GetMapping("users/{username}/todos/{id}")
 	public ToDo getToDo(@PathVariable String username, @PathVariable String id){
 		return todoService.findById(Integer.parseInt(id));
+	}
+	
+	@PostMapping("users/{username}/todos")
+	public ResponseEntity<ToDo> addToDo(@PathVariable String username, @RequestBody ToDo todo) throws JsonParseException, JsonMappingException, IOException{
+		ToDo td =  todoService.save(todo);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(td.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+	
+	@PutMapping("users/{username}/todos/{id}")
+	public ResponseEntity<ToDo> updateToDo(@PathVariable String username,@PathVariable String id, @RequestBody ToDo todo) throws JsonParseException, JsonMappingException, IOException{
+		ToDo td =  todoService.save(todo);
+		return new ResponseEntity<ToDo> (td, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("users/{username}/todos/{id}")

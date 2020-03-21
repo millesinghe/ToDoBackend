@@ -12,7 +12,7 @@ import com.test.springboot.todo.model.ToDo;
 public class ToDoService {
 
 	private static List<ToDo> todos = new ArrayList<ToDo>();
-	private static long id = 0;
+	private static int id = 0;
 
 	static {
 		todos.add(new ToDo(++id, "admin", "wedding", new Date(), false));
@@ -34,6 +34,19 @@ public class ToDoService {
 			return todo;
 		}
 		return null;
+		
+	}
+	
+	public ToDo save(ToDo todo) {
+		
+		if(todo.getId() == 0){
+			todo.setId(++id);
+			todos.add(todo);
+		} else {
+			this.deleteTodo((int)todo.getId());
+			todos.add(todo);
+		}
+		return todo;
 		
 	}
 
