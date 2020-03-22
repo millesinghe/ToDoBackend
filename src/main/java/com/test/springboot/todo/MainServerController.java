@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.test.springboot.todo.model.ServerBean;
 
-@CrossOrigin("http://localhost:4200")
 @RestController
+@CrossOrigin("http://localhost:4200")
 public class MainServerController {
 
 	@GetMapping("/test")
