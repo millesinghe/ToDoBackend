@@ -1,4 +1,4 @@
-package com.test.springboot.todo.auth;
+package com.test.disable.springboot.todo.auth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
