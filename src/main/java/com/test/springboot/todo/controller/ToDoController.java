@@ -1,4 +1,4 @@
-package com.test.springboot.todo;
+package com.test.springboot.todo.controller;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.springboot.todo.model.ToDo;
+import com.test.springboot.todo.repository.ToDoRepository;
 import com.test.springboot.todo.service.ToDoService;
 
 @RestController
@@ -30,6 +31,9 @@ public class ToDoController {
 	@Autowired
 	private ToDoService todoService;
 
+	@Autowired
+	private ToDoRepository repoTodo;
+
 	@GetMapping("users/{username}/todos/test")
 	public String testServer() {
 
@@ -38,35 +42,45 @@ public class ToDoController {
 	
 	@GetMapping("users/{username}/todos")
 	public List<ToDo> getAllTodos(@PathVariable String username){
-		return todoService.findAll();
+		//return todoService.findAll();
+		return repoTodo.findByUsername(username);
 	}
 	
 	@GetMapping("users/{username}/todos/{id}")
 	public ToDo getToDo(@PathVariable String username, @PathVariable String id){
-		return todoService.findById(Integer.parseInt(id));
+		//return todoService.findById(Integer.parseInt(id));
+		return repoTodo.findById(Long.parseLong(id)).get();
 	}
 	
 	@PostMapping("users/{username}/todos")
 	public ResponseEntity<ToDo> addToDo(@PathVariable String username, @RequestBody ToDo todo) throws JsonParseException, JsonMappingException, IOException{
-		ToDo td =  todoService.save(todo);
+		//ToDo td =  todoService.save(todo);
+		todo.setUsername(username);
+		ToDo td =  repoTodo.save(todo);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(td.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping("users/{username}/todos/{id}")
 	public ResponseEntity<ToDo> updateToDo(@PathVariable String username,@PathVariable String id, @RequestBody ToDo todo) throws JsonParseException, JsonMappingException, IOException{
-		ToDo td =  todoService.save(todo);
+		//ToDo td =  todoService.save(todo);
+		ToDo td =  repoTodo.save(todo);
 		return new ResponseEntity<ToDo> (td, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("users/{username}/todos/{id}")
 	public ResponseEntity<Void> deleteToDo(@PathVariable String username,@PathVariable String id){
-		ToDo todo =  todoService.deleteTodo(Integer.parseInt(id));
+		
+		/*ToDo todo =  todoService.deleteTodo(Integer.parseInt(id));
 		
 		if (todo != null){
 			return ResponseEntity.noContent().build();
 		}else{
 			return ResponseEntity.notFound().build();
-		}
+		}*/
+		
+		repoTodo.deleteById(Long.parseLong(id));
+		
+		return ResponseEntity.noContent().build();
 	}
 }

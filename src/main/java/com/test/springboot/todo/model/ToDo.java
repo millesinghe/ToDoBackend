@@ -2,31 +2,37 @@ package com.test.springboot.todo.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class ToDo {
 
-	private int id;
+	@Id
+	@GeneratedValue
+	private Long id;
+	
 	private String username;
 	private String task;
-	private Date date;
+	private Date deadline;
 	private boolean status;
-	
-	
 	
 	public ToDo() {}
 
-	public ToDo(int id, String username, String task, Date date, boolean status) {
+	public ToDo(Long id, String username, String task, Date deadline, boolean status) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.task = task;
-		this.date = date;
+		this.setDeadline(deadline);
 		this.status = status;
 	}
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getUsername() {
@@ -41,18 +47,20 @@ public class ToDo {
 	public void setTask(String task) {
 		this.task = task;
 	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
+
 	public boolean isStatus() {
 		return status;
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}	
 	
 }

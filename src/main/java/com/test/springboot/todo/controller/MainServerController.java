@@ -1,4 +1,4 @@
-package com.test.springboot.todo;
+package com.test.springboot.todo.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
